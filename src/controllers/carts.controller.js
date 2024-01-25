@@ -1,8 +1,10 @@
 import twilio from "twilio";
+import  jwt from "jsonwebtoken";
 import { cartsService } from "../repositoryServices/index.js";
 import config from "../config/config.js";
 import customError from "../services/errors/errors.generate.js"
 import { errorsMessage, errorsName } from "../services/errors/errors.enum.js";
+import { productsService } from "../repositoryServices/index.js";
 import { transporter } from "../utils/nodemailer.js";
 import { uManager } from "../DAL/dao/mongo/users.dao.js";
 export const createACart = (req, res) => {
@@ -31,15 +33,24 @@ export const findCart = async (req, res, next) => {
 
 export const addProductToCart =  async (req, res,next) => {
     const { cid, pid } = req.params;
-
+    let token = req.headers.authorization?.split(' ')[1]; 
+    const decoded = jwt.verify(token,config.secret_jwt);
+    req.user = decoded;
+    const user=req.user
+    console.log(user)
     if (!cid || !pid ) {
         customError.createError(errorsName.DATA_NOT_RECEIVED,errorsMessage.DATA_NOT_RECEIVED,500)
     }
-    try {
+    try {   
+        const product= await productsService.findProdById(pid)
+        console.log(product)
+        if (user._id==product.owner) {
+            customError.createError(errorsName.YOU_CREATED_PRODUCT,errorsMessage.YOU_CREATED_PRODUCT,500)
+        }
         const productAdded = await cartsService.addProduct(cid, pid);
     res.status(200).json({ message: "Product added to Cart", cart: productAdded });
     }catch (error){
-        next(error)
+        res.status(500).json({message:error.message})
     }    
 };
 

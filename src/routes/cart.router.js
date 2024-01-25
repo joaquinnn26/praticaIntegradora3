@@ -15,7 +15,7 @@ router.get('/:cid', findCart)
 
 
 /* ADD PRODUCT TO CART */
-router.post('/:cid/products/:pid', addProductToCart)
+router.post('/:cid/products/:pid'/* ,authorize(["USER","PREMIUM","ADMIN"]) */, addProductToCart)
 
 
 

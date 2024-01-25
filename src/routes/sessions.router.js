@@ -35,11 +35,11 @@ router.get('/signout', async(req, res)=>{
 router.post('/login', passport.authenticate('login', { failureMessage:true,
   failureRedirect: "/error",}),(req, res) => {
 
-    const {name, email, age, role, carts} = req.user    
+    const {name, email, age, role, carts,_id} = req.user    
    
-    const token = generateToken({ name, email, age, role, carts})
+    const token = generateToken({ name, email, age, role, carts,_id})
 
-    res.cookie('token', token, { maxAge: 60000, httpOnly: true })
+    res.cookie('token', token, { maxAge: 6000000, httpOnly: true })
     return res.redirect('/api/sessions/current')
 }) 
 

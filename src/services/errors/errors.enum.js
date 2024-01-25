@@ -1,4 +1,5 @@
 export const errorsMessage={
+    YOU_CREATED_PRODUCT:"you can't add your own product",
     PRODUCT_NOT_FOUND:"Product not found ",
     CART_NOT_FOUND:"Cart not found",
     CART_ALREADY_EXIST:"Cart already exist",
@@ -13,6 +14,7 @@ export const errorsMessage={
 
 
 export const errorsName={
+    YOU_CREATED_PRODUCT:"you can't add your own product",
     PRODUCT_NOT_FOUND:"Product not found ",
     CART_NOT_FOUND:"Cart not found",
     CART_ALREADY_EXIST:"Cart already exist",

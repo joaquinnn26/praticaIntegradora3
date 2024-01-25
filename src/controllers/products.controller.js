@@ -2,6 +2,7 @@ import { findAllProds, createProd, findProdById, deleteOneProd, updateProd } fro
 import { uManager } from "../DAL/dao/mongo/users.dao.js";
 import customError from "../services/errors/errors.generate.js"
 import { errorsMessage, errorsName } from "../services/errors/errors.enum.js";
+import config from "../config/config.js";
 import jwt from "jsonwebtoken";
 
 export const findProds = async (req, res,next) => {
@@ -55,14 +56,25 @@ export const createProduct =  async (req, res,next) => {
 
 export const deleteOneProduct = async (req, res,next) => {
     const { pid } = req.params;
+/*     let token = req.headers.authorization?.split(' ')[1]; 
+    const decoded = jwt.verify(token,config.secret_jwt);
+    req.user = decoded;
+    console.log(token) */
+    const user =req.user
+    console.log(user)
+
     try {
-        const prod = await deleteOneProd(pid);
+        const producto= await findProdById(pid)
+        console.log("producto",producto)
+        if (user._id==producto.owner) {
+            const prod = await deleteOneProd(pid);
         if (!prod) {
             customError.createError(errorsName.PRODUCT_NOT_FOUND,errorsMessage.PRODUCT_NOT_FOUND,500)
         }
+        }
         res.status(200).json({ message: "Product deleted" });
     } catch (error) {
-    next(error)
+        res.status(500).json({message:error.message });
     }
 }
 

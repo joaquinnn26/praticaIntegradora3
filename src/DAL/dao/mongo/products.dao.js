@@ -61,6 +61,10 @@ class ProductsManager {
     const result = await productsModel.updateOne({ _id: id }, obj);
     return result;
   }  
+  async findByOwner(id){
+    const result = await productsModel.findOne({owner:id})
+    return result
+  }
 }
 
 export const manager = new ProductsManager();

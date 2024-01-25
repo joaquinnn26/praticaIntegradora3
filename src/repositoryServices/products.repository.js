@@ -27,5 +27,8 @@ export default class ProductsRepository {
         const prod = manager.updateOne(id, obj);
         return prod;
     }    
-  
+    async findByOwner(id){
+        const prod =manager.findByOwner(id)
+        return prod
+    }
 }

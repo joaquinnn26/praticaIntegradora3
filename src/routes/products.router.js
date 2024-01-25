@@ -18,12 +18,12 @@ router.get('/:pid', findProductById)
 
 
 /* ADD PRODUCT */
-router.post("/",/* authenticateUser, */createProduct);//no anda ,no recibo la info del user para poner el email en el owner
+router.post("/",authorize(["ADMIN","PREMIUM"]),createProduct);
 
 
 
 /* DELETE PRODUCT */
-router.delete("/:pid", authorize(["ADMIN",]), deleteOneProduct);
+router.delete("/:pid", authorize(["ADMIN","PREMIUM"]), deleteOneProduct);
 
 
 
