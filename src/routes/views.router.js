@@ -2,8 +2,9 @@ import { Router } from "express";
 import { manager } from "../DAL/dao/mongo/products.dao.js";
 import { cManager } from "../DAL/dao/mongo/carts.dao.js";
 import { authorize } from "../middlewares/authMiddleware.js";
-
-
+import {logger} from "../utils/index.js"
+import passport from "passport"
+import "../passport.js"
 const router = Router();
 
 router.get("/login", (req, res) => {  
@@ -31,7 +32,7 @@ router.get("/signup", (req, res) => {
 
 
 
-router.get("/home", async (req, res) => {  
+router.get("/home", passport.authenticate('jwt', {session: false}) ,async (req, res) => {  
   try {
       const products = await manager.findAll(req.query)
       const {payload, info, page, limit, order, query} = products
@@ -42,7 +43,7 @@ router.get("/home", async (req, res) => {
         return res.redirect('/login')
       }
       const { first_name, email, isAdmin } = req.user;
-      logger.information(req.user)
+
       
       res.render("products", { user: { first_name, email, isAdmin }, productList: productObject, category, page, limit, order, nextPage, prevPage, style: "products" });          
     } catch (error) {
@@ -60,9 +61,8 @@ router.get("/recuperar",(req,res)=>{
 })
 
 router.get("/error", (req, res) => {
-  const allMessages = req.session.messages; // aca traigo el array completo de mensajes
-  const messages = allMessages[allMessages.length - 1]
-  console.log('req.session', req.session)
+  const allMessages = req.session.messages || [];
+  const messages = allMessages.length > 0 ? allMessages[allMessages.length - 1] : null;
   res.render("error", {messages, style: "error"});
 });
 

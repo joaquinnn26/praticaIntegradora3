@@ -36,11 +36,11 @@ router.post('/login', passport.authenticate('login', { failureMessage:true,
   failureRedirect: "/error",}),(req, res) => {
 
     const {name, email, age, role, carts,_id} = req.user    
-   
+   console.log(req.user)
     const token = generateToken({ name, email, age, role, carts,_id})
 
     res.cookie('token', token, { maxAge: 6000000, httpOnly: true })
-    return res.redirect('/api/sessions/current')
+    return res.redirect('/home')
 }) 
 
 router.post("/restaurar", restaurar)

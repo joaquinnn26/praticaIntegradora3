@@ -44,7 +44,7 @@ passport.use('signup', new LocalStrategy({
       if (email === admin.email && isAdminPassValid) {
         createdUser = await uManager.createUser({
           ...userDto,          
-          role: admin.role
+          role: "ADMIN"
         })
         return done(null, createdUser);
       }
