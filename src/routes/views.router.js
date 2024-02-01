@@ -56,9 +56,17 @@ router.get("/restaurar", (req, res) => {
   res.render("restore", {style: "restore"});
 });
 
-router.get("/recuperar",(req,res)=>{
-  res.render("recuperar",{style:"restore"})
-})
+router.get("/recuperar/:id", (req, res) => {
+  if (req.cookies.tokenEmail){
+    const {id} = req.params  
+    res.render("restoreTwo", {style: "restart", id});
+  } else {
+    console.log("No hay token en las cookies. Redirigiendo manualmente a /restore");
+    return res.redirect("/restaurar")
+  }
+});
+
+
 
 router.get("/error", (req, res) => {
   const allMessages = req.session.messages || [];

@@ -2,20 +2,24 @@ import { usersService } from "../repositoryServices/index.js";
 import customError from "../services/errors/errors.generate.js";
 import { transporter } from "../utils/index.js";
 import { hashData ,compareData} from "../utils/index.js";
+import { generateToken } from "../utils/index.js";
+import { logger } from "../utils/index.js";
+import { uManager } from "../DAL/dao/mongo/users.dao.js";
 const serverURL = 'http://localhost:8080';
 
 export const recuperar = async (req, res) => {
-    const { uid }=req.params;
+    const { id }=req.params;
     const { password} = req.body;
-    const user = await usersService.findById(uid);
-   
+ 
+      if (req.cookies.tokenEmail) { 
+       
+        try {
+      const user = await uManager.findUserByID(id);
       
       if (!user) {
         logger.error("user no encontrado")
-        return res.redirect("/");
+        return res.redirect("/login");
       }
-      if (req.cookies.tokenEmail) {
-         try {
         const isRepeatPassword=await compareData(user.password,password)
         if (isRepeatPassword) {
           return res.json({ message: "This password is not valid" });
@@ -57,7 +61,7 @@ export const restaurar = async (req, res) => {
         <p>¡Hola!</p>
         
         <p>Haz clic en el siguiente botón para recuperar su contraseña:</p>
-        <a href="${serverURL}/api/sessions/recuperar/${user._id}" target="_blank" style="padding: 10px 20px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px; display: inline-block;">Ir a la página</a>
+        <a href="${serverURL}/recuperar/${user._id}" target="_blank" style="padding: 10px 20px; background-color: #007bff; color: #ffffff; text-decoration: none; border-radius: 5px; display: inline-block;">Ir a la página</a>
       `,
       });
       

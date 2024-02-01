@@ -45,7 +45,7 @@ router.post('/login', passport.authenticate('login', { failureMessage:true,
 
 router.post("/restaurar", restaurar)
 
-router.post("/recuperar/:uid",recuperar)
+router.post("/recuperar/:id",recuperar)
 export default router
 
 
