@@ -10,7 +10,8 @@ const serverURL = 'http://localhost:8080';
 export const recuperar = async (req, res) => {
     const { id }=req.params;
     const { password} = req.body;
- 
+  console.log(req.body)
+  console.log(req.params)
       if (req.cookies.tokenEmail) { 
        
         try {
@@ -18,7 +19,7 @@ export const recuperar = async (req, res) => {
       
       if (!user) {
         logger.error("user no encontrado")
-        return res.redirect("/login");
+        //return res.redirect("/login");
       }
         const isRepeatPassword=await compareData(user.password,password)
         if (isRepeatPassword) {

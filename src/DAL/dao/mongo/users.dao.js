@@ -3,7 +3,7 @@ import { usersModel } from "../../models/users.model.js"
 class UsersManager  {
     async findUserByID(id) {
         try {
-            const result = await usersModel.findOne({id});
+            const result = await usersModel.findById(id);
             console.log(result);
             return result;
         } catch (error) {

@@ -58,8 +58,8 @@ router.get("/restaurar", (req, res) => {
 
 router.get("/recuperar/:id", (req, res) => {
   if (req.cookies.tokenEmail){
-    const {id} = req.params  
-    res.render("restoreTwo", {style: "restart", id});
+    const { id } = req.params  
+    res.render("restoreTwo", {style: "restart",id: id.toString()});
   } else {
     console.log("No hay token en las cookies. Redirigiendo manualmente a /restore");
     return res.redirect("/restaurar")
